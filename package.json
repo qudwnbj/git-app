@@ -1,6 +1,7 @@
 {
   "name": "git-app",
   "version": "0.1.0",
+  "main": "./public/electron.js",
   "private": true,
   "dependencies": {
     "electron-is-dev": "^2.0.0",
@@ -14,7 +15,14 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "start-renderer": "cross-env BROWSER=none npm run start",
+    "start-main": "electron .",
+    "compile-main": "tsc ./public/electron.ts",
+    "start-main-after-renderer": "wait-on http://localhost:3000 && npm run start-main",
+    "dev": "concurrently -n renderer, main 'npm:start-renderer' 'npm:start-main-after-renderer'",
+    "dist": "npm run build && electron-builder --dir",
+    "predist": "npm run compile-main"
   },
   "eslintConfig": {
     "extends": [
